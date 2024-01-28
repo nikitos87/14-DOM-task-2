@@ -71,6 +71,9 @@ const tasks = [
 ];
 
 const tasksList = document.querySelector(".tasks-list");
+const form = document.querySelector(".create-task-block");
+
+const uniqueId = Date.now();
 
 function createTask(id, text) {
   return `
@@ -101,5 +104,12 @@ function createTask(id, text) {
 
 tasks.forEach(function (task) {
   const newTask = createTask(task.id, task.text);
+  tasksList.innerHTML += newTask;
+});
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const taskText = e.target.elements[0].value;
+  const newTask = createTask(uniqueId, taskText);
   tasksList.innerHTML += newTask;
 });
