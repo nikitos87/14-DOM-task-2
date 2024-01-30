@@ -73,8 +73,6 @@ const tasks = [
 const tasksList = document.querySelector(".tasks-list");
 const form = document.querySelector(".create-task-block");
 
-const uniqueId = Date.now();
-
 function createTask(id, text) {
   return `
         <div class="task-item" data-task-id=${id}>
@@ -107,9 +105,48 @@ tasks.forEach(function (task) {
   tasksList.innerHTML += newTask;
 });
 
+function validateTask(tasks, task) {
+  const duplicate = tasks.some(({ text }) => task === text);
+
+  let message = "";
+
+  let errorBlock = form.querySelector(".error-message-block");
+
+  if (errorBlock) {
+    errorBlock.remove();
+  }
+
+  if (task === "") {
+    message = "Название задачи не должно быть пустым";
+  } else if (duplicate) {
+    message = "Задача с таким названием уже существует.";
+  }
+
+  if (message) {
+    errorBlock = document.createElement("span");
+    errorBlock.classList.add("error-message-block");
+    errorBlock.textContent = message;
+    form.append(errorBlock);
+  }
+
+  return message;
+}
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   const taskText = e.target.elements[0].value;
-  const newTask = createTask(uniqueId, taskText);
-  tasksList.innerHTML += newTask;
+
+  const message = validateTask(tasks, taskText);
+
+  if (!message) {
+    const uniqueId = Date.now();
+
+    tasks.push({
+      id: uniqueId.toString(),
+      completed: false,
+      text: taskText,
+    });
+    const newTask = createTask(uniqueId, taskText);
+    tasksList.innerHTML += newTask;
+  }
 });
