@@ -70,6 +70,7 @@ const tasks = [
   },
 ];
 
+const body = document.querySelector("body");
 const tasksList = document.querySelector(".tasks-list");
 const form = document.querySelector(".create-task-block");
 
@@ -78,17 +79,17 @@ function createTask(id, text) {
         <div class="task-item" data-task-id=${id}>
             <div class="task-item__main-container">
                 <div class="task-item__main-content">
-                <form class="checkbox-form">
-                    <input
-                    class="checkbox-form__checkbox"
-                    type="checkbox"
-                    id=${id}
-                    />
-                    <label for=${id}></label>
-                </form>
-                <span class="task-item__text">
-                    ${text}
-                </span>
+                  <form class="checkbox-form">
+                      <input
+                      class="checkbox-form__checkbox"
+                      type="checkbox"
+                      id=${id}
+                      />
+                      <label for=${id}></label>
+                  </form>
+                  <span class="task-item__text">
+                      ${text}
+                  </span>
                 </div>
                 <button
                 class="task-item__delete-button default-button delete-button"
@@ -148,5 +149,65 @@ form.addEventListener("submit", function (e) {
     });
     const newTask = createTask(uniqueId, taskText);
     tasksList.innerHTML += newTask;
+  }
+});
+
+function createModal() {
+  const modalWrapper = document.createElement("div");
+  modalWrapper.classList.add("modal-overlay");
+  modalWrapper.classList.add("modal-overlay_hidden");
+  const modalDelete = document.createElement("div");
+  modalDelete.classList.add("delete-modal");
+  const modalTitle = document.createElement("h3");
+  modalTitle.classList.add("delete-modal__question");
+  modalTitle.textContent = "Вы действительно хотите удалить эту задачу?";
+  const modalButtons = document.createElement("div");
+  modalButtons.classList.add("delete-modal__buttons");
+  const cancelButton = document.createElement("button");
+  cancelButton.classList.add("delete-modal__button");
+  cancelButton.classList.add("delete-modal__cancel-button");
+  cancelButton.textContent = "Отмена";
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("delete-modal__button");
+  deleteButton.classList.add("delete-modal__confirm-button");
+  deleteButton.textContent = "Удалить";
+
+  modalButtons.append(cancelButton);
+  modalButtons.append(deleteButton);
+  modalDelete.append(modalTitle);
+  modalDelete.append(modalButtons);
+  modalWrapper.append(modalDelete);
+
+  return modalWrapper;
+}
+
+const modalWindow = createModal();
+body.append(modalWindow);
+
+tasksList.addEventListener("click", function (e) {
+  if (e.target.className.includes("task-item__delete-button")) {
+    const taskToDelete = e.target
+      .closest(".task-item")
+      .getAttribute("data-task-id");
+
+    const modalWrapper = document.querySelector(".modal-overlay");
+    modalWrapper.classList.remove("modal-overlay_hidden");
+
+    const deleteButton = document.querySelector(
+      ".delete-modal__confirm-button"
+    );
+    const cancelButton = document.querySelector(".delete-modal__cancel-button");
+
+    deleteButton.addEventListener("click", function (e) {
+      const taskItem = document.querySelector(
+        `[data-task-id="${taskToDelete}"]`
+      );
+      taskItem.remove();
+      modalWrapper.classList.add("modal-overlay_hidden");
+    });
+
+    cancelButton.addEventListener("click", function (e) {
+      modalWrapper.classList.add("modal-overlay_hidden");
+    });
   }
 });
