@@ -277,3 +277,11 @@ body {
   background-color: var(--delete-button-background);
   border: 1px solid var(--delete-button-background);
 }
+
+.task-item__text--dark {
+  color: #fff;
+}
+
+.delete-button--dark {
+  border: 1px solid #fff;
+}

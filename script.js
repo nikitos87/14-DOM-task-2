@@ -73,8 +73,9 @@ const tasks = [
 const body = document.querySelector("body");
 const tasksList = document.querySelector(".tasks-list");
 const form = document.querySelector(".create-task-block");
+let darkTheme = false;
 
-function createTask(id, text) {
+function createTask(id, text, theme) {
   return `
         <div class="task-item" data-task-id=${id}>
             <div class="task-item__main-container">
@@ -87,12 +88,20 @@ function createTask(id, text) {
                       />
                       <label for=${id}></label>
                   </form>
-                  <span class="task-item__text">
+                  <span class='${
+                    theme
+                      ? "task-item__text task-item__text--dark"
+                      : "task-item__text"
+                  }'>
                       ${text}
                   </span>
                 </div>
                 <button
-                class="task-item__delete-button default-button delete-button"
+                class='${
+                  theme
+                    ? "task-item__delete-button default-button delete-button delete-button--dark"
+                    : "task-item__delete-button default-button delete-button"
+                }'
                 >
                 Удалить
                 </button>
@@ -147,7 +156,7 @@ form.addEventListener("submit", function (e) {
       completed: false,
       text: taskText,
     });
-    const newTask = createTask(uniqueId, taskText);
+    const newTask = createTask(uniqueId, taskText, darkTheme);
     tasksList.innerHTML += newTask;
   }
 });
@@ -227,13 +236,12 @@ tasksList.addEventListener("click", function (e) {
 });
 
 // Задание #4
-let darkTheme = false;
 
 document.addEventListener("keydown", function (e) {
-  e.preventDefault();
+  // e.preventDefault();
   if (document.querySelector(".task-item")) {
     const taskItems = document.querySelectorAll(".task-item");
-    const btns = document.querySelectorAll(".task-item__delete-button");
+    const btns = document.querySelectorAll("button");
 
     if (e.key === "Tab" && !darkTheme) {
       darkTheme = true;
