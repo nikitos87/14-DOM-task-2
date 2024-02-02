@@ -152,6 +152,8 @@ form.addEventListener("submit", function (e) {
   }
 });
 
+// Задание #3
+
 function createModal() {
   const modalWrapper = document.createElement("div");
   modalWrapper.classList.add("modal-overlay");
@@ -211,7 +213,7 @@ tasksList.addEventListener("click", function (e) {
           (task) => task.id === taskToDeleteAttribute
         );
         tasks.splice(itemIndex, 1);
-        console.log(tasks);
+        // console.log(tasks);
       }
 
       return tasks;
@@ -221,5 +223,28 @@ tasksList.addEventListener("click", function (e) {
       modalWrapper.classList.add("modal-overlay_hidden");
       taskToDeleteAttribute = "";
     });
+  }
+});
+
+// Задание #4
+let darkTheme = false;
+
+document.addEventListener("keydown", function (e) {
+  e.preventDefault();
+  if (document.querySelector(".task-item")) {
+    const taskItems = document.querySelectorAll(".task-item");
+    const btns = document.querySelectorAll(".task-item__delete-button");
+
+    if (e.key === "Tab" && !darkTheme) {
+      darkTheme = true;
+      body.style.backgroundColor = "#24292E";
+      taskItems.forEach((taskItem) => (taskItem.style.color = "#ffffff"));
+      btns.forEach((btn) => (btn.style.border = "1px solid #ffffff"));
+    } else if (e.key === "Tab" && darkTheme) {
+      darkTheme = false;
+      body.style.backgroundColor = "initial";
+      taskItems.forEach((taskItem) => (taskItem.style.color = "initial"));
+      btns.forEach((btn) => (btn.style.border = "none"));
+    }
   }
 });
