@@ -186,7 +186,7 @@ body.append(modalWindow);
 
 tasksList.addEventListener("click", function (e) {
   if (e.target.className.includes("task-item__delete-button")) {
-    const taskToDelete = e.target
+    let taskToDeleteAttribute = e.target
       .closest(".task-item")
       .getAttribute("data-task-id");
 
@@ -200,14 +200,26 @@ tasksList.addEventListener("click", function (e) {
 
     deleteButton.addEventListener("click", function (e) {
       const taskItem = document.querySelector(
-        `[data-task-id="${taskToDelete}"]`
+        `[data-task-id="${taskToDeleteAttribute}"]`
       );
-      taskItem.remove();
-      modalWrapper.classList.add("modal-overlay_hidden");
+      if (taskItem) {
+        taskItem.remove();
+        modalWrapper.classList.add("modal-overlay_hidden");
+
+        // removing task item from the tasks array
+        const itemIndex = tasks.findIndex(
+          (task) => task.id === taskToDeleteAttribute
+        );
+        tasks.splice(itemIndex, 1);
+        console.log(tasks);
+      }
+
+      return tasks;
     });
 
     cancelButton.addEventListener("click", function (e) {
       modalWrapper.classList.add("modal-overlay_hidden");
+      taskToDeleteAttribute = "";
     });
   }
 });
