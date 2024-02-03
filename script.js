@@ -251,7 +251,17 @@ document.addEventListener("keydown", function (e) {
     } else if (e.key === "Tab" && darkTheme) {
       darkTheme = false;
       body.style.backgroundColor = "initial";
-      taskItems.forEach((taskItem) => (taskItem.style.color = "initial"));
+      taskItems.forEach((taskItem) => {
+        const taskItemSpans = document.querySelectorAll(".task-item__text");
+        // console.log(taskItemSpans);
+        taskItemSpans.forEach((taskItemSpan) => {
+          if (taskItemSpan.classList.contains("task-item__text--dark")) {
+            taskItemSpan.classList.remove("task-item__text--dark");
+          }
+        });
+        // console.log(taskItem.children.children);
+        taskItem.style.color = "initial";
+      });
       btns.forEach((btn) => (btn.style.border = "none"));
     }
   }
